@@ -1,0 +1,367 @@
+{% extends 'base.html' %}
+{% block title %}Sign up{% endblock %}
+{% block content %}
+{% include 'site_header.html' %}
+<div class="signup-wrap">
+  <!-- Header -->
+  <div class="signup-head">
+    <div class="split-eyebrow" style="color:var(--teal);">
+      Create your account
+    </div>
+
+    <h1>Choose your berth.</h1>
+
+    <p>
+      One account, one path. Tell us why you're here and we'll take you
+      straight to the dashboard built for it.
+    </p>
+  </div>
+
+
+  <!-- Signup Form -->
+  <form method="post" novalidate id="signup-form">
+    {% csrf_token %}
+
+    <!-- Step 1 -->
+    <div class="step-label">
+      <span class="n">1</span>
+      I'm here to&hellip;
+    </div>
+
+    <!-- Role Selection -->
+    <div class="role-grid">
+      <!-- Recruiter -->
+      <label class="role-card" id="role-card-recruiter">
+        <input
+          type="radio"
+          name="role"
+          value="recruiter"
+          style="display:none;"
+          {% if request.GET.role == 'recruiter' or form.role.value == 'recruiter' %}
+            checked
+          {% endif %}
+        >
+
+        <span class="check"></span>
+
+        <div class="role-icon">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+          >
+            <rect
+              x="2"
+              y="4"
+              width="12"
+              height="9"
+              stroke="currentColor"
+              stroke-width="1.3"
+            />
+
+            <path
+              d="M6 4V2h4v2"
+              stroke="currentColor"
+              stroke-width="1.3"
+            />
+          </svg>
+        </div>
+
+        <h4>Hire people</h4>
+
+        <p>
+          Post roles, review candidates, and move them through
+          a pipeline built for your team.
+        </p>
+      </label>
+
+
+      <!-- Job Seeker -->
+      <label class="role-card" id="role-card-seeker">
+        <input
+          type="radio"
+          name="role"
+          value="seeker"
+          style="display:none;"
+          {% if request.GET.role == 'seeker' or form.role.value == 'seeker' %}
+            checked
+          {% endif %}
+        >
+
+        <span class="check"></span>
+
+        <div class="role-icon">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+          >
+            <circle
+              cx="8"
+              cy="5.5"
+              r="2.5"
+              stroke="currentColor"
+              stroke-width="1.3"
+            />
+
+            <path
+              d="M3 14c0-2.8 2.2-5 5-5s5 2.2 5 5"
+              stroke="currentColor"
+              stroke-width="1.3"
+            />
+          </svg>
+        </div>
+
+        <h4>Find work</h4>
+
+        <p>
+          Apply to roles, track every application, and see
+          the ones worth your time first.
+        </p>
+      </label>
+    </div>
+
+    <!-- Role Error -->
+    {% if form.role.errors %}
+      <div class="field-error">
+        {{ form.role.errors.0 }}
+      </div>
+    {% endif %}
+
+    <!-- Step 2 / Details -->
+    <div
+      class="signup-form"
+      id="details-section"
+      style="display: none;"
+    >
+      <div
+        class="step-label"
+        style="margin-top:6px;"
+      >
+        <span class="n">2</span>
+        Your details
+      </div>
+
+      <!-- Full Name + Email -->
+      <div class="form-row">
+        <!-- Full Name -->
+        <div class="form-field">
+          <label for="id_full_name">
+            Full name
+          </label>
+
+          <input
+            type="text"
+            name="full_name"
+            id="id_full_name"
+            placeholder="Your full name"
+            value="{{ form.full_name.value|default:'' }}"
+            required
+          >
+
+          {% if form.full_name.errors %}
+            <div class="field-error">
+              {{ form.full_name.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Email -->
+        <div class="form-field">
+          <label for="id_email">
+            Email
+          </label>
+
+          <input
+            type="email"
+            name="email"
+            id="id_email"
+            placeholder="you@company.com"
+            value="{{ form.email.value|default:'' }}"
+            required
+          >
+
+          {% if form.email.errors %}
+            <div class="field-error">
+              {{ form.email.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Organization / Current Role -->
+      <div class="form-row">
+        <div class="form-field full">
+          <label
+            for="id_organization"
+            id="org-label"
+          >
+            Company name
+          </label>
+
+          <input
+            type="text"
+            name="organization"
+            id="id_organization"
+            placeholder="Your company"
+            value="{{ form.organization.value|default:'' }}"
+          >
+
+          {% if form.organization.errors %}
+            <div class="field-error">
+              {{ form.organization.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Passwords -->
+      <div class="form-row">
+        <!-- Password -->
+        <div class="form-field">
+          <label for="id_password1">
+            Password
+          </label>
+
+          <input
+            type="password"
+            name="password1"
+            id="id_password1"
+            required
+          >
+
+          {% if form.password1.errors %}
+            <div class="field-error">
+              {{ form.password1.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+
+
+        <!-- Confirm Password -->
+        <div class="form-field">
+          <label for="id_password2">
+            Confirm password
+          </label>
+
+          <input
+            type="password"
+            name="password2"
+            id="id_password2"
+            required
+          >
+
+          {% if form.password2.errors %}
+            <div class="field-error">
+              {{ form.password2.errors.0 }}
+            </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="btn btn-dark signup-submit"
+        id="signup-submit-btn"
+      >
+        Create account
+      </button>
+
+      <!-- Login -->
+      <div class="signup-foot">
+        Already have an account?
+        <a href="{% url 'login' %}">
+          Log in
+        </a>
+      </div>
+    </div>
+  </form>
+</div>
+
+<script>
+  // Role cards
+  const recruiterCard =
+    document.getElementById('role-card-recruiter');
+  const seekerCard =
+    document.getElementById('role-card-seeker');
+
+  // Radio inputs
+  const recruiterInput =
+    recruiterCard.querySelector('input');
+  const seekerInput =
+    seekerCard.querySelector('input');
+
+  // Details elements
+  const detailsSection =
+    document.getElementById('details-section');
+  const orgLabel =
+    document.getElementById('org-label');
+  const orgInput =
+    document.getElementById('id_organization');
+  const submitBtn =
+    document.getElementById('signup-submit-btn');
+
+  function syncRoleUI() {
+    const recruiterChecked =
+      recruiterInput.checked;
+    const seekerChecked =
+      seekerInput.checked;
+
+    recruiterCard.classList.toggle(
+      'selected',
+      recruiterChecked
+    );
+
+    seekerCard.classList.toggle(
+      'selected',
+      seekerChecked
+    );
+
+    if (recruiterChecked || seekerChecked) {
+      detailsSection.style.display = 'block';
+    } else {
+      detailsSection.style.display = 'none';
+    }
+
+    if (recruiterChecked) {
+      orgLabel.textContent =
+        'Company name';
+      orgInput.placeholder =
+        'Your company';
+      submitBtn.textContent =
+        'Create recruiter account';
+    }else if (seekerChecked) {
+      orgLabel.textContent =
+        'Current or most recent role';
+      orgInput.placeholder =
+        'e.g. Product Designer';
+      submitBtn.textContent =
+        'Create seeker account';
+    }
+  }
+
+  [recruiterCard, seekerCard].forEach(card => {
+    card.addEventListener('click', () => {
+      const input =
+        card.querySelector('input');
+
+      input.checked = true;
+
+      syncRoleUI();
+
+      setTimeout(() => {
+        detailsSection.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }, 100);
+    });
+  });
+
+  syncRoleUI();
+</script>
+
+{% endblock %}

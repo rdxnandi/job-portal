@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Log in{% endblock %}
+{% block content %}
+{% include 'site_header.html' %}
+<div class="signup-wrap" style="max-width:460px;">
+    <div class="signup-head">
+        <div class="split-eyebrow" style="color:var(--teal);">Welcome back</div>
+        <h1>Log in to Berth.</h1>
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-field" style="margin-bottom:14px;">
+            <label for="id_username">Email</label>
+            <input 
+                type="email" 
+                name="username" 
+                id="id_username" placeholder="you@company.com" required 
+                autofocus
+            >
+        </div>
+        <div class="form-field" style="margin-bottom:18px;">
+            <label for="id_password">Password</label>
+            <input 
+                type="password" 
+                name="password" 
+                id="id_password" 
+                required
+            >
+        </div>
+
+        {% if form.errors %}
+        <div class="field-error" style="margin-bottom:14px;">Your email or password didn't match. Try again.</div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-dark signup-submit">Log in</button>
+        <div class="signup-foot">
+            New to Berth? <a href="{% url 'signup' %}">Create an account</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

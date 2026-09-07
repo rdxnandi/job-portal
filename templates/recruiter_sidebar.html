@@ -1,0 +1,119 @@
+<aside class="dash-sidebar">
+  <div class="dash-brand">
+    <svg 
+      width="22" 
+      height="22" 
+      viewBox="0 0 26 26" 
+      fill="none"
+    >
+      <path 
+        d="M4 20L13 4L22 20" 
+        stroke="#B9873C" 
+        stroke-width="2" 
+        fill="none"
+      />
+      <path 
+        d="M4 20C4 20 8 23 13 23C18 23 22 20 22 20" stroke="#FBF9F3" 
+        stroke-width="2" 
+        fill="none"
+      />
+    </svg>
+    Berth
+  </div>
+  <nav class="dash-nav">
+    <a href="{% url 'jobs:recruiter_dashboard' %}" class="active">
+      <svg 
+        width="16" 
+        height="16" 
+        viewBox="0 0 16 16" 
+        fill="none"
+      >
+        <rect 
+          x="2" 
+          y="2" 
+          width="5" 
+          height="5" 
+          stroke="currentColor" 
+          stroke-width="1.3"
+        />
+        <rect 
+          x="9" 
+          y="2" 
+          width="5" 
+          height="5" 
+          stroke="currentColor" 
+          stroke-width="1.3"
+        />
+        <rect 
+          x="2" 
+          y="9" 
+          width="5" 
+          height="5" 
+          stroke="currentColor" 
+          stroke-width="1.3"
+        />
+        <rect 
+          x="9" 
+          y="9" 
+          width="5" 
+          height="5" 
+          stroke="currentColor" 
+          stroke-width="1.3"
+        />
+      </svg>
+      Overview
+    </a>
+    <a href="{% url 'jobs:post_job' %}">
+      <svg 
+        width="16" 
+        height="16" 
+        viewBox="0 0 16 16" 
+        fill="none"
+      >
+        <rect 
+          x="2" 
+          y="4" 
+          width="12" 
+          height="9" 
+          stroke="currentColor" 
+          stroke-width="1.3"
+        />
+        <path 
+          d="M6 4V2h4v2" 
+          stroke="currentColor" 
+          stroke-width="1.3"
+        />
+      </svg>
+      Post a job
+    </a>
+    <a href="{% url 'jobs:job_list' %}">
+      <svg 
+        width="16" 
+        height="16" 
+        viewBox="0 0 16 16" 
+        fill="none"
+      >
+        <circle 
+          cx="8" 
+          cy="5.5" 
+          r="2.5" 
+          stroke="currentColor" 
+          stroke-width="1.3"
+        />
+        <path 
+          d="M3 14c0-2.8 2.2-5 5-5s5 2.2 5 5" stroke="currentColor" 
+          stroke-width="1.3"
+        />
+      </svg>
+      Browse listings
+    </a>
+  </nav>
+  <div class="spacer"></div>
+  <div class="dash-user">
+    <div class="avatar-sq">{{ user.initials }}</div>
+    <div>
+      <div class="who">{{ user.get_full_name|default:user.username }}</div>
+      <div class="role">Talent Partner{% if user.organization %} · {{ user.organization }}{% endif %}</div>
+    </div>
+  </div>
+</aside>

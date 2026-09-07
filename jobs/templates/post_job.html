@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Post a job{% endblock %}
+{% block content %}
+<div class="dash">
+  {% include 'recruiter_sidebar.html' %}
+
+  <main class="dash-main">
+    <div class="dash-topbar">
+      <h1>Post a job</h1>
+    </div>
+
+    <form method="post" style="max-width:640px;">
+      {% csrf_token %}
+      <div class="form-row">
+        <div class="form-field full">
+          <label for="{{ form.title.id_for_label }}">Job title</label>
+          {{ form.title }}
+          {% if form.title.errors %}<div class="field-error">{{ form.title.errors.0 }}</div>{% endif %}
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="{{ form.company.id_for_label }}">Company</label>
+          {{ form.company }}
+        </div>
+        <div class="form-field">
+          <label for="{{ form.location.id_for_label }}">Location</label>
+          {{ form.location }}
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="{{ form.job_type.id_for_label }}">Job type</label>
+          {{ form.job_type }}
+        </div>
+        <div class="form-field">
+          <label for="{{ form.status.id_for_label }}">Status</label>
+          {{ form.status }}
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label for="{{ form.salary_min.id_for_label }}">Salary min</label>
+          {{ form.salary_min }}
+        </div>
+        <div class="form-field">
+          <label for="{{ form.salary_max.id_for_label }}">Salary max</label>
+          {{ form.salary_max }}
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field full">
+          <label for="{{ form.description.id_for_label }}">Description</label>
+          {{ form.description }}
+        </div>
+      </div>
+      <button type="submit" class="btn btn-brass signup-submit" style="width:auto; padding:12px 28px;">Post job</button>
+    </form>
+  </main>
+</div>
+
+{% endblock %}

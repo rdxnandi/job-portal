@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block title %}Your applications{% endblock %}
+{% block content %}
+<div class="dash">
+  {% include 'seeker_sidebar.html' %}
+
+  <main class="dash-main">
+    <div class="dash-topbar">
+      <h1>Your applications</h1>
+    </div>
+
+    <div class="welcome-card bracketed">
+      <div>
+        <h2>Welcome back, {{ user.first_name|default:user.username }}.</h2>
+        <p>{{ applications.count }} application{{ applications.count|pluralize }} tracked. Keep an eye on the ones marked Interview or Offer.</p>
+      </div>
+    </div>
+
+    <div class="panel-head">
+      <h2>Active applications ({{ applications.count }})</h2>
+    </div>
+    <div class="app-manifest">
+      {% for app in applications %}
+      <div class="app-row">
+        <div>
+          <div class="job-title" style="font-size:15.5px;">
+            <a href="{{ app.job.get_absolute_url }}">{{ app.job.title }}</a>
+          </div>
+          <div class="job-company">{{ app.job.company }}</div>
+        </div>
+        <div class="job-meta">Applied {{ app.applied_at|date:"M j" }}</div>
+        <div class="job-meta">Updated {{ app.updated_at|timesince }} ago</div>
+        <div>
+          <span class="stamp {{ app.stage }}">{{ app.get_stage_display }}</span>
+        </div>
+      </div>
+      {% empty %}
+      <div class="empty-state">You haven't applied to anything yet. Browse open roles below.</div>
+      {% endfor %}
+    </div>
+
+    <div class="panel-head">
+      <h2>Recommended for you</h2>
+      <a href="{% url 'jobs:job_list' %}" class="link">See more matches</a>
+    </div>
+    <div class="rec-grid">
+      {% for job in recommended %}
+      <div class="rec-card">
+        <h4>{{ job.title }}</h4>
+        <div class="co">{{ job.company }} · {{ job.location }}</div>
+        <div class="meta-row">
+          <span class="job-tag">{{ job.salary_range }}</span>
+          <span class="job-tag">{{ job.get_job_type_display }}</span>
+        </div>
+        <form method="post" action="{% url 'jobs:apply_to_job' job.id %}" class="apply-form">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-dark" style="width:100%;">Apply now</button>
+        </form>
+      </div>
+      {% empty %}
+      <div class="empty-state" style="grid-column:1/-1;">No open roles match your profile right now — check back soon.</div>
+      {% endfor %}
+    </div>
+  </main>
+</div>
+
+{% endblock %}

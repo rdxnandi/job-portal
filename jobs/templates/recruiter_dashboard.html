@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+{% load dict_extras %}
+{% block title %}Recruiter dashboard{% endblock %}
+{% block content %}
+<div class="dash">
+  {% include 'recruiter_sidebar.html' %}
+
+  <main class="dash-main">
+    <div class="dash-topbar">
+      <div>
+        <h1>Good to see you, {{ user.first_name|default:user.username }}</h1>
+        <div class="sub">{{ jobs.count }} role{{ jobs.count|pluralize }} posted · {{ stats.new_applicants }} new applicant{{ stats.new_applicants|pluralize }} waiting on you</div>
+      </div>
+      <a href="{% url 'jobs:post_job' %}" class="btn btn-brass">New job posting</a>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat-card">
+        <div class="cap">OPEN ROLES</div>
+        <div class="val">{{ stats.open_roles }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="cap">NEW APPLICANTS</div>
+        <div class="val">{{ stats.new_applicants }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="cap">IN INTERVIEW</div>
+        <div class="val">{{ stats.interviews }}</div>
+      </div>
+      <div class="stat-card">
+        <div class="cap">OFFERS PENDING</div>
+        <div class="val">{{ stats.offers }}</div>
+      </div>
+    </div>
+
+    <div class="panel-head">
+      <h2>Candidate pipeline</h2>
+    </div>
+    <div class="pipeline">
+      {% for stage_key, stage_label in stage_choices %}
+      <div class="stage" data-stage="{{ stage_key }}">
+        <div class="stage-head">
+          <span class="name">{{ stage_label }}</span>
+          <span class="count mono">{{ pipeline|get_item:stage_key|length }}</span>
+        </div>
+        {% for app in pipeline|get_item:stage_key %}
+        <div class="candidate-card">
+          <div class="top">
+            <div class="initials">{{ app.applicant.initials }}</div>
+            <div>
+              <div class="name">{{ app.applicant.get_full_name|default:app.applicant.username }}</div>
+              <div class="role">{{ app.job.title }}</div>
+            </div>
+          </div>
+          <div class="foot">
+            <span>{{ app.updated_at|timesince }} ago</span>
+          </div>
+          <div class="candidate-actions">
+            {% if app.next_stage %}
+            <form method="post" action="{% url 'jobs:advance_stage' app.id %}" style="flex:1; margin:0;">
+              {% csrf_token %}
+              <button type="submit" style="width:100%;">Advance</button>
+            </form>
+            {% endif %}
+            <form method="post" action="{% url 'jobs:reject_application' app.id %}" style="flex:1; margin:0;">
+              {% csrf_token %}
+              <button type="submit" class="reject" style="width:100%;">Reject</button>
+            </form>
+          </div>
+        </div>
+        {% empty %}
+        <div style="font-size:12px; color:var(--muted-2); padding:8px 4px;">No candidates here.</div>
+        {% endfor %}
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="panel-head">
+      <h2>All job postings</h2>
+    </div>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Role</th>
+          <th>Applicants</th>
+          <th>Status</th>
+          <th>Posted</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for job in jobs %}
+        <tr>
+          <td>
+            <strong>
+              <a href="{{ job.get_absolute_url }}">{{ job.title }}</a>
+            </strong>
+          </td>
+          <td>{{ job.applications.count }}</td>
+          <td>
+            {% if job.status == 'live' %}
+            <span class="status-pill status-live"><span class="dot"></span>Live</span>
+            {% elif job.status == 'draft' %}
+            <span class="status-pill status-draft"><span class="dot"></span>Draft</span>
+            {% else %}
+            <span class="status-pill status-closed"><span class="dot"></span>Closed</span>
+            {% endif %}
+          </td>
+          <td class="mono">{{ job.created_at|date:"M j" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+          <td colspan="4">
+            <div class="empty-state">
+              You haven't posted a role yet. <a href="{% url 'jobs:post_job' %}" style="color:var(--teal); border-bottom:1px solid var(--teal);">Post your first job</a>.
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </main>
+</div>
+
+{% endblock %}

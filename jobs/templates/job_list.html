@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Find jobs{% endblock %}
+{% block content %}
+{% include 'site_header.html' %}
+<div class="section">
+  <div class="section-head">
+    <h2>Open roles</h2>
+  </div>
+  <div class="manifest">
+    {% for job in jobs %}
+    <div class="manifest-row">
+      <div>
+        <div class="job-title">
+          <a href="{{ job.get_absolute_url }}">{{ job.title }}</a>
+        </div>
+        <div class="job-company">{{ job.company }} · {{ job.location }}</div>
+      </div>
+      <div class="job-meta">{{ job.salary_range }}</div>
+      <div class="job-meta">{{ job.get_job_type_display }}</div>
+      <div>
+        <span class="job-tag">{{ job.created_at|timesince }} ago</span>
+      </div>
+      <a href="{{ job.get_absolute_url }}" class="btn btn-ghost apply-btn">View</a>
+    </div>
+    {% empty %}
+    <div class="empty-state">No open roles right now. Check back soon.</div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}

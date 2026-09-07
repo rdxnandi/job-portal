@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% block title %}every voyage needs a berth{% endblock %}
+{% block content %}
+{% include 'site_header.html' %}
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">
+      <span class="rule"></span> {{ stats.open_roles }} roles open right now
+    </div>
+    <h1>Every voyage needs a berth.</h1>
+    <p class="hero-sub">Berth matches people to positions worth arriving at — and gives hiring teams a clearer view of who's actually a fit, not just who applied first.</p>
+    <div class="hero-stats">
+      <div>
+        <div class="num">{{ stats.open_roles }}</div>
+        <div class="cap">open roles</div>
+      </div>
+      <div>
+        <div class="num">{{ stats.companies }}</div>
+        <div class="cap">hiring companies</div>
+      </div>
+      <div>
+        <div class="num">{{ stats.hires }}</div>
+        <div class="cap">people hired</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="split">
+  <div class="split-panel dark">
+    <div class="split-eyebrow">For hiring teams</div>
+    <h3>Fill roles with people who'd actually stay.</h3>
+    <p class="desc">Post a role, screen candidates, and move them through a pipeline built for hiring — not a spreadsheet pretending to be one.</p>
+    <a href="{% url 'signup' %}?role=recruiter" class="btn btn-brass">Sign up to hire</a>
+  </div>
+  <div class="split-panel light">
+    <div class="split-eyebrow">For job seekers</div>
+    <h3>Track every application without losing the thread.</h3>
+    <p class="desc">See exactly where each application stands, and get matched to roles worth your time.</p>
+    <a href="{% url 'signup' %}?role=seeker" class="btn btn-dark">Sign up to search</a>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-head">
+    <h2>Recently posted</h2>
+    <a href="{% url 'jobs:job_list' %}" class="view-all">View all roles</a>
+  </div>
+  <div class="manifest">
+    {% for job in jobs %}
+    <div class="manifest-row">
+      <div>
+        <div class="job-title">
+          <a href="{{ job.get_absolute_url }}">{{ job.title }}</a>
+        </div>
+        <div class="job-company">{{ job.company }} · {{ job.location }}</div>
+      </div>
+      <div class="job-meta">{{ job.salary_range }}</div>
+      <div class="job-meta">
+        {{ job.get_job_type_display }}
+      </div>
+      <div>
+        <span class="job-tag">{{ job.created_at|timesince }} ago</span>
+      </div>
+      <a href="{{ job.get_absolute_url }}" class="btn btn-ghost apply-btn">View</a>
+    </div>
+    {% empty %}
+    <div class="empty-state">
+      No roles posted yet. Recruiters — <a href="{% url 'signup' %}?role=recruiter" style="color:var(--teal); border-bottom:1px solid var(--teal);">sign up</a> to post the first one.
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-bottom">
+      <span>© 2026 Berth. All ports welcome.</span>
+      <span>Made for people between roles.</span>
+    </div>
+  </div>
+</footer>
+
+{% endblock %}
